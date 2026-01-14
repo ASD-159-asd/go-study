@@ -6,22 +6,21 @@ import (
 	"os"
 )
 
-func handleClient(conn net.Conn) {
+func h(conn net.Conn) {
 	defer conn.Close()
-	clientAddr := conn.RemoteAddr().String()
-	fmt.Println("已经连接:", clientAddr)
-
+	Addr := conn.RemoteAddr().String()
+	fmt.Println("已经连接:", Addr)
 	buf := make([]byte, 1024)
 	n, _ := conn.Read(buf)
-	fmt.Printf("[%s] 捕获数据: %s\n", clientAddr, string(buf[:n]))
+	fmt.Printf("[%s] 捕获数据: %s\n", Addr, string(buf[:n]))
 }
 
 func main() {
-	var role string
+	var r string
 	fmt.Print("输入’z‘抓包 ‘f’发包): ")
-	fmt.Scanln(&role)
+	fmt.Scanln(&r)
 
-	switch role {
+	switch r {
 	case "z":
 		listener, err := net.Listen("tcp", ":8080")
 		if err != nil {
@@ -52,7 +51,7 @@ func main() {
 				fmt.Println("抓包已停止")
 				return
 			}
-			go handleClient(conn)
+			go h(conn)
 		}
 
 	case "f":
